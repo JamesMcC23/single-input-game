@@ -3,18 +3,19 @@ using TMPro;
 using UnityEngine.InputSystem;
 using System.Collections;
 using UnityEngine.UI;
+using UnityEngine.U2D;
 
 public class player_control : MonoBehaviour
 {
-    [SerializeField] private TMP_Text info_text;
+    [SerializeField] private Image cursor_image;
     
-    [SerializeField] private bool view_x = false;
     private Vector2 mouse_position;
     private Vector2 current_mouse_position;
     [SerializeField] private float seconds_delay = 0.1f;
     bool enumerator_switch;
     [SerializeField] float rotate_speed;
     [SerializeField] float move_speed;
+    [SerializeField] SpriteAtlas cursor_sprites;
 
 
     
@@ -27,25 +28,15 @@ public class player_control : MonoBehaviour
     void Update()
     {
         mouse_position = Mouse.current.position.ReadValue();
-        info_text.transform.position = mouse_position;
+        cursor_image.transform.position = mouse_position;
         float rotate_parameter = (Screen.width / 2);
         float x_difference;
         float y_difference;
         
 
-        if(UnityEngine.InputSystem.Keyboard.current.spaceKey.wasPressedThisFrame)
-        {
-            view_x = !view_x;
-        }
+    
 
-        if(view_x == true)
-        {
-            info_text.text = string.Format("{0:N3}" , mouse_position.x);
-        }
-        else
-        {
-            info_text.text = string.Format("{0:N3}" , mouse_position.y);
-        }
+        
 
         // if (Mouse.current.leftButton.isPressed)
         // {
@@ -59,6 +50,7 @@ public class player_control : MonoBehaviour
             if(mouse_position.x <= (Screen.width / 2))
             {
                 //left hand side
+                cursor_image.sprite = cursor_sprites.GetSprite("directional arrows_1");
                 y_difference = current_mouse_position.y - mouse_position.y;
                 if(y_difference > 0)
                 {
@@ -67,12 +59,17 @@ public class player_control : MonoBehaviour
                 }
        
             }
-            else
+            else if(mouse_position.x >= (Screen.width / 2))
             {
                 //right hand side
+                cursor_image.sprite = cursor_sprites.GetSprite("directional arrows_0");
                x_difference = current_mouse_position.x - mouse_position.x;
                 this.transform.localEulerAngles += new Vector3(0,rotate_speed * (x_difference/(Screen.width / 2)),0);
 
+            }
+            else
+            {
+                cursor_image.sprite = cursor_sprites.GetSprite("directional arrows_2");
             }
         }
 
