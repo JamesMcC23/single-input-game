@@ -29,19 +29,17 @@ public class player_control : MonoBehaviour
 
     void Update()
     {
+        //movement variables
         mouse_position = Mouse.current.position.ReadValue();
         cursor_image.transform.position = mouse_position;
         float rotate_parameter = (Screen.width / 2);
         float x_difference;
         float y_difference;
+
+        //interaction variables
+        Camera player_camera = GetComponentInChildren<Camera>();
         
-
-    
-
-        
-
-    
-
+        // movement scripting 
         if(mouse_position.y <= (Screen.height / 2))
         {
             
@@ -77,6 +75,10 @@ public class player_control : MonoBehaviour
             enumerator_switch = false;
             StartCoroutine(mouse_position_per_frames());
         }
+
+        //interaction scripting
+        
+
 
     }
 
