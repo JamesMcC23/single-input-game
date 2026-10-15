@@ -10,29 +10,31 @@ public class interaction_controls : MonoBehaviour
     void Update()
     {
         Vector2 mouse_pos = Mouse.current.position.ReadValue();
-        interaction_position = player_camera.ScreenToWorldPoint(new Vector3 (mouse_pos.x,mouse_pos.y, player_camera.nearClipPlane));
+        interaction_position = player_camera.ScreenToWorldPoint(new Vector3 (mouse_pos.x,mouse_pos.y, player_camera.nearClipPlane) + new Vector3(0,0,10));
 
         this.transform.position = interaction_position;
+        RaycastHit hit;
 
-        Physics.Raycast(this.transform.position,this.transform.position - interaction_position, out RaycastHit hit , Mathf.Infinity);
-        if(hit != null)
+        if(Physics.Raycast(player_camera.transform.position,(this.transform.position - interaction_position)* 100, out hit))
         {
             if(hit.collider.CompareTag("interactible"))
             {
-            Debug.Log("it hit");
+                Debug.Log($"it hit <hit>");     
             }
-            else
+            else 
             {
                 Debug.Log("it didn't hit :(");
             }
         }
+        Debug.DrawRay(player_camera.transform.position,(this.transform.position - interaction_position)* 100,Color.green);
+        
 
     }
 
-    private void OawGizmos()
+    private void OnDrawGizmos()
     {
         Gizmos.color = Color.red;
-        Gizmos.DrawRay(this.transform.position,this.transform.position - interaction_position);
+        Gizmos.DrawRay(player_camera.transform.position,(this.transform.position - interaction_position)*100);
     }
 
 }
