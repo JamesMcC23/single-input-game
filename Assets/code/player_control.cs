@@ -17,6 +17,7 @@ public class player_control : MonoBehaviour
     [SerializeField] float rotate_speed;
     [SerializeField] float move_speed;
     [SerializeField] Texture2D cursor_sprites;
+    private Rigidbody player_body;
 
 
     
@@ -24,6 +25,7 @@ public class player_control : MonoBehaviour
     {
         enumerator_switch = true;
         cursor_sprites = Resources.Load<Texture2D>("Assets/assets/directional arrows.png");
+        player_body = GetComponent<Rigidbody>();
     }
 
 
@@ -52,6 +54,8 @@ public class player_control : MonoBehaviour
                 if(y_difference > 0)
                 {
                    //Change to addForce when implementing physics
+                   //note: this simply doesn't work without a change in code soooooooo
+
                    transform.Translate(new Vector3(0,0,move_speed * (y_difference/(Screen.height / 2))));
                 }
        

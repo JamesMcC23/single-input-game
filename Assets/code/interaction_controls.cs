@@ -7,12 +7,11 @@ public class interaction_controls : MonoBehaviour
     [SerializeField] private Camera player_camera;
     private Vector3 interaction_position;
     private Vector3 mouse_direction;
+    public bool button_control = false;
     [SerializeField] private int player_reach = 10;
-    private ParticleSystem interact_particles;
 
     void Start()
     {
-        interact_particles = GetComponentInChildren<ParticleSystem>();
     }
 
     void Update()
@@ -25,30 +24,28 @@ public class interaction_controls : MonoBehaviour
         RaycastHit hit;
         Physics.Raycast(player_camera.transform.position,mouse_direction.normalized, out hit, player_reach);
 
-        if(hit.collider != null)
+        if(hit.collider != null && hit.collider.CompareTag("interactible") && hit.collider.gameObject.GetComponent<interactible>())
         {
-            if(hit.collider.CompareTag("interactible"))
-            {
-                Debug.Log(hit.collider.gameObject.name);
-                interact_particles.transform.position = hit.collider.transform.position;
-                interact_particles.Play();
-            }
-            else if(hit.collider.tag == null)
-            {
-                interact_particles.Stop();
-            }
-            else
-            {
-                interact_particles.Stop();
-            }
-
-
-
+            trigger(hit);
+            button_control = true;
+        }
+        else
+        {
+            button_control = false;
         }
 
         Debug.DrawRay(player_camera.transform.position,mouse_direction.normalized * player_reach,Color.green);
+            
         
+        
+    }
 
+    private void trigger(RaycastHit hit)
+    {
+        interactible interact_script;
+        interact_script = hit.collider.gameObject.GetComponent<interactible>();
+        interact_script.interaction();
+        
     }
 
 }
