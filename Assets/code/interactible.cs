@@ -19,7 +19,7 @@ public class interactible : MonoBehaviour
         {
             if (trigger_object.TryGetComponent(out ITriggered itriggered))
             {
-                itriggered.linked_switch = this;
+                //itriggered.linked_switch = this;
             }
         }
     }
