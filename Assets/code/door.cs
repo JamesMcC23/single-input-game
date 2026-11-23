@@ -3,30 +3,30 @@ using UnityEngine;
 public class door : MonoBehaviour, ITriggered
 {
     private bool state;
-    private ParticleSystem test;
+    private Animator animator_comp;
     public interactible linked_switch;
     
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Awake()
     {
-        test = GetComponent<ParticleSystem>();
+        animator_comp = GetComponent<Animator>();
     }
 
-    public void on_triggered()
+    public void on_triggered(bool trigger_state)
     {
-        state = !state;
+        state = trigger_state;
     }
 
     public void Update()
     {
-        Debug.Log($"door state = {state}");
+        Debug.Log(state);
         if(state == true)
         {
-            test.Play();
+            
         }
         else
         {
-            test.Stop();
+            
         }
     }
 }

@@ -7,7 +7,8 @@ public class interaction_controls : MonoBehaviour
     [SerializeField] private Camera player_camera;
     private Vector3 interaction_position;
     private Vector3 mouse_direction;
-    public bool button_control = false;
+    public bool control = false;
+    private bool switch_control;
     [SerializeField] private int player_reach = 10;
 
     void Start()
@@ -26,12 +27,18 @@ public class interaction_controls : MonoBehaviour
 
         if(hit.collider != null && hit.collider.CompareTag("interactible") && hit.collider.gameObject.GetComponent<interactible>())
         {
-            trigger(hit);
-            button_control = true;
+            if(switch_control == true)
+            {
+                trigger(hit,control);
+                switch_control = false;
+            }
+
+            
+            
         }
         else
         {
-            button_control = false;
+            switch_control = true;
         }
 
         Debug.DrawRay(player_camera.transform.position,mouse_direction.normalized * player_reach,Color.green);
@@ -40,11 +47,12 @@ public class interaction_controls : MonoBehaviour
         
     }
 
-    private void trigger(RaycastHit hit)
+    private void trigger(RaycastHit hit, bool control)
     {
         interactible interact_script;
         interact_script = hit.collider.gameObject.GetComponent<interactible>();
-        interact_script.interaction();
+        control = interact_script.switch_control;
+        interact_script.interaction(control);
         
     }
 

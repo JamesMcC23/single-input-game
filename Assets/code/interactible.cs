@@ -1,13 +1,16 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class interactible : MonoBehaviour
 {
     public bool interact_switch;
-    public bool interact_button;
+    public bool switch_control;
     private interaction_controls player_controller;
     private GameObject player;
+
+    private bool test;
     [SerializeField] private List<GameObject> trigger_objects;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -15,27 +18,25 @@ public class interactible : MonoBehaviour
     {
         player = GameObject.FindGameObjectWithTag("Player");
         player_controller = player.GetComponentInChildren<interaction_controls>();
-        foreach (GameObject trigger_object  in trigger_objects)
-        {
-            if (trigger_object.TryGetComponent(out ITriggered itriggered))
-            {
-                //itriggered.linked_switch = this;
-            }
-        }
     }
 
-    public void interaction()
+    public void interaction(bool control)
     {
         Debug.Log("interaction running");
         
-        interact_switch = !interact_switch; 
+        if(switch_control == control)
+        {
+            interact_switch = !interact_switch;
+            switch_control = !control;
+        }
+         
     
         foreach (GameObject trigger_object  in trigger_objects)
         {
-
+            
             if (trigger_object.TryGetComponent(out ITriggered itriggered))
             {
-                itriggered.on_triggered();
+                itriggered.on_triggered(interact_switch);
             }
             else
             {
@@ -46,8 +47,5 @@ public class interactible : MonoBehaviour
 
     }
 
-    public void Update()
-    {
-        interact_button = player_controller.button_control;
-    }
+
 }

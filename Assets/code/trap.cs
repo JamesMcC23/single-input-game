@@ -12,14 +12,13 @@ public class trap : MonoBehaviour, ITriggered
         test = GetComponent<ParticleSystem>();
     }
 
-    public void on_triggered()
+    public void on_triggered( bool trigger_state)
     {
-        state = !state;
+        state = trigger_state;
     }
 
     public void Update()
     {
-        Debug.Log($"trap state = {state}");
         if(state == true)
         {
             test.Play();
