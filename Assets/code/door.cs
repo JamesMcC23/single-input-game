@@ -22,11 +22,11 @@ public class door : MonoBehaviour, ITriggered
         Debug.Log(state);
         if(state == true)
         {
-            
+            animator_comp.SetBool("is_open",true);
         }
         else
         {
-            
+            animator_comp.SetBool("is_open",false);
         }
     }
 }
