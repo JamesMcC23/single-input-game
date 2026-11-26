@@ -18,6 +18,10 @@ public class player_control : MonoBehaviour
     [SerializeField] float move_speed;
     [SerializeField] Texture2D cursor_sprites;
     private Rigidbody player_body;
+    private bool can_move = true;
+
+    [SerializeField] float wall_check_radius;
+    [SerializeField] float check_distance;
 
 
     
@@ -51,11 +55,14 @@ public class player_control : MonoBehaviour
                 //left hand side
                 
                 y_difference = current_mouse_position.y - mouse_position.y;
+                /*Physics.SphereCastAll(player_body.transform.position + new Vector3(0,0,check_distance),wall_check_radius,Vector3.forward,wall_check_radius,out RaycastHit hit);
+                if(!hit.collider.gameObject.CompareTag("floor"))
+                {
+                    
+                }
+                */
                 if(y_difference > 0)
                 {
-                   //Change to addForce when implementing physics
-                   //note: this simply doesn't work without a change in code soooooooo
-
                    transform.Translate(new Vector3(0,0,move_speed * (y_difference/(Screen.height / 2))));
                 }
        
@@ -63,8 +70,8 @@ public class player_control : MonoBehaviour
             else if(mouse_position.x >= (Screen.width / 2))
             {
                 //right hand side
-               // cursor_image.sprite = Resources.Load("Assets/assets/directional arrows.png");
-               x_difference = current_mouse_position.x - mouse_position.x;
+                // cursor_image.sprite = Resources.Load("Assets/assets/directional arrows.png");
+                x_difference = current_mouse_position.x - mouse_position.x;
                 this.transform.localEulerAngles += new Vector3(0,rotate_speed * (x_difference/(Screen.width / 2)),0);
 
             }
@@ -72,6 +79,8 @@ public class player_control : MonoBehaviour
             {
                 //cursor_image.sprite = ;
             }
+
+            Debug.Log(can_move);
         }
 
         if(enumerator_switch == true)
@@ -91,5 +100,16 @@ public class player_control : MonoBehaviour
         current_mouse_position = mouse_position;
         yield return new WaitForSeconds(seconds_delay);
         enumerator_switch = true;
+    }
+    private void OnTriggerStay(Collider hit)
+    {
+        if(!hit.gameObject.CompareTag("floor"))
+        {
+            can_move = false;
+        }
+        else
+        {
+            can_move = true;
+        }
     }
 }
